@@ -38,35 +38,44 @@ typedef struct Button {
 	Color bg;
 	Color fg;
 
+	bool is_pressed;
+
 	void (* on_pressed)(void);
 	void (* on_hover)(struct Button *btn);
+	void (* on_leave)(struct Button *btn);
 } Button;
 
 Button buttons[BUTTON_COUNT];
+
+sds mode;
 
 // == Button functions ==========================================
 void button_hovered(struct Button *btn) {
 	btn->bg = DARK_GRAY;
 }
 
+void button_on_leave(struct Button *btn) {
+	btn->bg = RED;
+}
+
 void paint_button_pressed() {
-	printf("paint button pressed\n");
+	mode = sdsnew("paint");
 }
 
 void erase_button_pressed() {
-	printf("erase button pressed\n");
+	mode = sdsnew("erase");
 }
 
 void pan_button_pressed() {
-	printf("pan button pressed\n");
+	mode = sdsnew("pan");
 }
 
 void eyedropper_button_pressed() {
-	printf("eyedropper button pressed\n");
+	mode = sdsnew("eyedropper");
 }
 
 void rectangle_button_pressed() {
-	printf("rectangle button pressed\n");
+	mode = sdsnew("rectangle");
 }
 
 void undo_button_pressed() {
@@ -108,8 +117,11 @@ void ui_draw() {
 bool ui_update() {
 	bool running = input_update();
 
+	float mouse_win_x = 0, mouse_win_y = 0;
+	input_get_mouse_pos(&mouse_win_x, &mouse_win_y);
+
 	float mouse_x = 0, mouse_y = 0;
-	input_get_mouse_pos(&mouse_x, &mouse_y);
+	window_to_render(mouse_win_x, mouse_win_y, &mouse_x, &mouse_y);
 
 	bool mouse_btn_1 = input_get_mouse_button(1);
 	bool mouse_btn_2 = input_get_mouse_button(2);
@@ -127,10 +139,16 @@ bool ui_update() {
 			mouse_y < btn->y + btn->h
 		) {
 			if(mouse_btn_1 || mouse_btn_2) {
-				btn->on_pressed();
+				if(!btn->is_pressed) {
+					btn->on_pressed();
+					btn->is_pressed = true;
+				}
 			} else {
 				btn->on_hover(btn);
+				btn->is_pressed = false;
 			}
+		} else {
+			btn->on_leave(btn);
 		}
 	}
 
@@ -143,7 +161,9 @@ void ui_init() {
 		buttons[i].w = 8;
 		buttons[i].h = 8;
 		buttons[i].bg = RED;
+		buttons[i].is_pressed = false;
 		buttons[i].on_hover = button_hovered;
+		buttons[i].on_leave = button_on_leave;
 	}
 
 	buttons[0].y = 8;
@@ -163,4 +183,6 @@ void ui_init() {
 	buttons[5].on_pressed = undo_button_pressed;
 	buttons[6].on_pressed = redo_button_pressed;
 	buttons[7].on_pressed = save_button_pressed;
+
+	mode = sdsnew("paint");
 }

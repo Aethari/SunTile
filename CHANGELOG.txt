@@ -1,6 +1,27 @@
-Version 0.0.0 (alpha)
+Version 0.x.x (alpha)
 =================================================================
-
 Major changes
 --------------------------------
-- Proejct start
+- Basic buttons (untextured, some functionless) set up (src/ui.c)
+- Added several command line options, including one to load
+  tilemaps from an sdat file (currently not functional)
+- Added test tilemap (test.sdat)
+- Made Makefile use the new `-f` parameter to load the test
+  tilemap on `test-<platform>` targets
+
+Minor changes
+--------------------------------
+- Added window_to_render(), which converts window coordinates
+  into render/display coordinates (src/render.h)
+- Added additional newline before "Running project:" message in
+  the Makefile
+
+Bugfixes
+--------------------------------
+- Fixed typo in CHANGELOG
+
+Version 0.0.0 (alpha)
+=================================================================
+Major changes
+--------------------------------
+- Project start

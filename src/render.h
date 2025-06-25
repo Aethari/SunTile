@@ -71,9 +71,6 @@ void render_line(int x, int y, int sx, int sy, Color col);
 /// - col: A Color value that the circle will be drawn in
 void render_circ(int x, int y, int radius, bool fill, Color col);
 
-void render_char(char chr, int x, int y, Color col);
-void render_print(sds str, int x, int y, Color col);
-
 // == Other functions ==========================================
 /// Recalculates the renderer's scale and applies it
 /// using SDL's built in logical presentation. The
@@ -82,13 +79,13 @@ void render_print(sds str, int x, int y, Color col);
 void render_scale();
 
 /// Converts a window coordinate into the relevant pixel on the
-/// renderer. Outputs '-1' if a coordinate is out of bounds.
+/// renderer.
 ///
 /// Parameters:
 /// - x, y: The window coordinates to convert
 /// - out_x, out_y: Pointers to variables that will be filled
 ///                 with the coordinates of the render pixel
-void window_to_render(float x, float y, int *out_x, int *out_y);
+void window_to_render(float x, float y, float *out_x, float *out_y);
 
 /// Creates a new SDL_Renderer with size 256*128px,
 /// then assigns it to a local variable.

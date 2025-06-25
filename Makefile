@@ -74,10 +74,11 @@ build-unix:
 test-unix:
 	make
 
+	@echo
 	@echo Running project:
 	@echo build/sunTile
 	@echo
-	@build/sunTile
+	@build/sunTile -f test.sdat
 
 install-unix:
 	make
@@ -110,7 +111,7 @@ test-win:
 	@echo Running project:
 	@echo build/sunTile.exe
 	@echo
-	@../build/sunTile.exe
+	@../build/sunTile.exe -f test.sdat
 
 clean-win:
 	@cmd /C "if not exist "build" mkdir build"

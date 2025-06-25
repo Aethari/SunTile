@@ -157,7 +157,8 @@ void render_scale() {
 	);
 }
 
-void window_to_render(float x, float y, int *out_x, int *out_y) {
+void window_to_render(float x, float y, float *out_x, float *out_y) {
+	SDL_RenderCoordinatesFromWindow(rend, x, y, out_x, out_y);
 }
 
 void render_init(SDL_Window *win) {
